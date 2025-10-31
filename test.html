@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salesforce Show API Name - Test Page</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .feature-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #0176d3;
+        }
+        .code-block {
+            background: #f1f3f4;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .button {
+            background: #0176d3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+        }
+        .button:hover {
+            background: #0056b3;
+        }
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .warning {
+            color: #ffc107;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Salesforce Show API Name Extension</h1>
+    
+    <div class="feature-section">
+        <h2>✨ New Feature Added: Field Metadata Display</h2>
+        <p>Добавлена новая функция для отображения метаданных полей Salesforce!</p>
+        
+        <h3>🎯 Что было реализовано:</h3>
+        <ul>
+            <li><strong>Новая кнопка с диагональной стрелкой</strong> - появляется рядом с каждым полем</li>
+            <li><strong>Всплывающее окно метаданных</strong> - показывает детальную информацию о поле</li>
+            <li><strong>Интеграция с Salesforce API</strong> - использует существующие запросы к describe API</li>
+            <li><strong>Красивый UI</strong> - современный дизайн в стиле Salesforce Lightning</li>
+        </ul>
+    </div>
+
+    <div class="feature-section">
+        <h3>📋 Отображаемые метаданные поля:</h3>
+        <div class="code-block">
+autoNumber, calculated, calculatedFormula, createable, caseSensitive,
+custom, defaultValue, defaultValueFormula, defaultedOnCreate,
+dependentPicklist, controllerName, digits, externalId, filterable,
+label, length, name, picklistValues, precision, scale, type, relationshipName
+        </div>
+    </div>
+
+    <div class="feature-section">
+        <h3>🔧 Как использовать:</h3>
+        <ol>
+            <li>Загрузите расширение в Chrome (Developer mode)</li>
+            <li>Откройте любую страницу Salesforce (Lightning или Classic)</li>
+            <li>Нажмите на иконку расширения или используйте Ctrl+Shift+A</li>
+            <li>Увидите API имена полей и новые кнопки с диагональными стрелками</li>
+            <li>Нажмите на кнопку со стрелкой для просмотра метаданных поля</li>
+        </ol>
+    </div>
+
+    <div class="feature-section">
+        <h3>📁 Структура проекта:</h3>
+        <div class="code-block">
+src/
+├── manifest.json     # Конфигурация расширения
+├── background.js     # Обновлен для получения метаданных
+├── content_script.js # Добавлена функция метаданных
+└── images/          # Иконки расширения
+        </div>
+    </div>
+
+    <div class="feature-section">
+        <h3>✅ Статус реализации:</h3>
+        <p class="success">✓ Анализ существующего API кода</p>
+        <p class="success">✓ Обновление background.js для метаданных</p>
+        <p class="success">✓ Создание кнопки с диагональной стрелкой</p>
+        <p class="success">✓ Реализация всплывающего окна</p>
+        <p class="success">✓ Добавление стилей</p>
+        <p class="warning">⏳ Тестирование в Salesforce</p>
+    </div>
+
+    <div class="feature-section">
+        <h3>🎨 Особенности UI:</h3>
+        <ul>
+            <li>Адаптивный дизайн для Lightning и Classic режимов</li>
+            <li>Анимации появления и исчезновения</li>
+            <li>Цветовая индикация для boolean значений</li>
+            <li>Специальное форматирование для формул</li>
+            <li>Закрытие по Escape или клику вне окна</li>
+        </ul>
+    </div>
+
+    <p style="text-align: center; margin-top: 40px;">
+        <a href="https://github.com" class="button">📚 Документация</a>
+        <a href="chrome://extensions/" class="button">🔧 Загрузить расширение</a>
+    </p>
+</body>
+</html>
