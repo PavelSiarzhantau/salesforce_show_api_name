@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salesforce Test Page - Lightning Experience</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f3f3f3;
+        }
+        
+        .slds-page-header {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .slds-page-header__title {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+        }
+        
+        .slds-form {
+            background: white;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .slds-form-element {
+            margin-bottom: 20px;
+        }
+        
+        .slds-form-element__label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .slds-form-element__control {
+            position: relative;
+        }
+        
+        .slds-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d8dde6;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .test-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .test-instructions {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ff9800;
+        }
+        
+        .debug-panel {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #333;
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            max-width: 300px;
+            z-index: 10000;
+        }
+        
+        .activate-btn {
+            background: #0176d3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+        
+        .activate-btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-panel" id="debugPanel">
+        <div>Debug Console:</div>
+        <div id="debugLog">Waiting for extension...</div>
+    </div>
+
+    <div class="test-info">
+        <h3>🧪 Тестовая страница Salesforce</h3>
+        <p>Эта страница имитирует структуру Lightning Experience для тестирования расширения.</p>
+        <button class="activate-btn" onclick="simulateExtension()">Симулировать активацию расширения</button>
+    </div>
+
+    <div class="test-instructions">
+        <h4>📋 Инструкции по тестированию:</h4>
+        <ol>
+            <li>Убедитесь, что расширение загружено в Chrome</li>
+            <li>Откройте Developer Tools (F12) и перейдите на вкладку Console</li>
+            <li>Нажмите на иконку расширения или используйте Ctrl+Shift+A</li>
+            <li>Проверьте, появились ли API имена рядом с полями</li>
+            <li>Нажмите на кнопку со стрелкой для просмотра метаданных</li>
+            <li>Проверьте консоль на наличие отладочных сообщений</li>
+        </ol>
+    </div>
+
+    <div class="slds-page-header">
+        <h1 class="slds-page-header__title">Account Detail</h1>
+    </div>
+
+    <div class="slds-form">
+        <div class="slds-form-element">
+            <label class="slds-form-element__label" for="account-name">Account Name</label>
+            <div class="slds-form-element__control">
+                <input type="text" id="account-name" class="slds-input" value="Test Account" readonly>
+            </div>
+        </div>
+
+        <div class="slds-form-element">
+            <label class="slds-form-element__label" for="account-type">Type</label>
+            <div class="slds-form-element__control">
+                <input type="text" id="account-type" class="slds-input" value="Customer" readonly>
+            </div>
+        </div>
+
+        <div class="slds-form-element">
+            <label class="slds-form-element__label" for="industry">Industry</label>
+            <div class="slds-form-element__control">
+                <input type="text" id="industry" class="slds-input" value="Technology" readonly>
+            </div>
+        </div>
+
+        <div class="slds-form-element">
+            <label class="slds-form-element__label" for="phone">Phone</label>
+            <div class="slds-form-element__control">
+                <input type="text" id="phone" class="slds-input" value="+1 555-123-4567" readonly>
+            </div>
+        </div>
+
+        <div class="slds-form-element">
+            <label class="slds-form-element__label" for="website">Website</label>
+            <div class="slds-form-element__control">
+                <input type="text" id="website" class="slds-input" value="https://example.com" readonly>
+            </div>
+        </div>
+
+        <div class="slds-form-element">
+            <label class="slds-form-element__label" for="annual-revenue">Annual Revenue</label>
+            <div class="slds-form-element__control">
+                <input type="text" id="annual-revenue" class="slds-input" value="$1,000,000" readonly>
+            </div>
+        </div>
+
+        <div class="slds-form-element">
+            <label class="slds-form-element__label" for="employees">Employees</label>
+            <div class="slds-form-element__control">
+                <input type="text" id="employees" class="slds-input" value="100" readonly>
+            </div>
+        </div>
+
+        <div class="slds-form-element">
+            <label class="slds-form-element__label" for="description">Description</label>
+            <div class="slds-form-element__control">
+                <textarea id="description" class="slds-input" rows="3" readonly>This is a test account for demonstration purposes.</textarea>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Debug logging
+        function debugLog(message) {
+            const debugPanel = document.getElementById('debugLog');
+            const timestamp = new Date().toLocaleTimeString();
+            debugPanel.innerHTML += `<br>[${timestamp}] ${message}`;
+            console.log(`[DEBUG] ${message}`);
+        }
+
+        // Simulate extension activation for testing
+        function simulateExtension() {
+            debugLog('Simulating extension activation...');
+            
+            // Simulate the message that would come from background.js
+            const mockMessage = {
+                command: 'showApiName',
+                isLightningMode: true,
+                sObjectName: 'Account',
+                longId: '001000000000000AAA',
+                labelMap: {
+                    'Account Name': ['Name'],
+                    'Type': ['Type'],
+                    'Industry': ['Industry'],
+                    'Phone': ['Phone'],
+                    'Website': ['Website'],
+                    'Annual Revenue': ['AnnualRevenue'],
+                    'Employees': ['NumberOfEmployees'],
+                    'Description': ['Description']
+                },
+                assistLabelMap: {},
+                fieldMetadata: {
+                    'Name': {
+                        autoNumber: false,
+                        calculated: false,
+                        calculatedFormula: null,
+                        createable: true,
+                        caseSensitive: false,
+                        custom: false,
+                        defaultValue: null,
+                        defaultValueFormula: null,
+                        defaultedOnCreate: false,
+                        dependentPicklist: false,
+                        controllerName: null,
+                        digits: 0,
+                        externalId: false,
+                        filterable: true,
+                        label: 'Account Name',
+                        length: 255,
+                        name: 'Name',
+                        picklistValues: [],
+                        precision: 0,
+                        scale: 0,
+                        type: 'string',
+                        relationshipName: null
+                    },
+                    'Type': {
+                        autoNumber: false,
+                        calculated: false,
+                        calculatedFormula: null,
+                        createable: true,
+                        caseSensitive: false,
+                        custom: false,
+                        defaultValue: null,
+                        defaultValueFormula: null,
+                        defaultedOnCreate: false,
+                        dependentPicklist: false,
+                        controllerName: null,
+                        digits: 0,
+                        externalId: false,
+                        filterable: true,
+                        label: 'Type',
+                        length: 40,
+                        name: 'Type',
+                        picklistValues: [
+                            {label: 'Prospect', value: 'Prospect'},
+                            {label: 'Customer', value: 'Customer'},
+                            {label: 'Partner', value: 'Partner'}
+                        ],
+                        precision: 0,
+                        scale: 0,
+                        type: 'picklist',
+                        relationshipName: null
+                    },
+                    'Industry': {
+                        autoNumber: false,
+                        calculated: false,
+                        calculatedFormula: null,
+                        createable: true,
+                        caseSensitive: false,
+                        custom: false,
+                        defaultValue: null,
+                        defaultValueFormula: null,
+                        defaultedOnCreate: false,
+                        dependentPicklist: false,
+                        controllerName: null,
+                        digits: 0,
+                        externalId: false,
+                        filterable: true,
+                        label: 'Industry',
+                        length: 40,
+                        name: 'Industry',
+                        picklistValues: [
+                            {label: 'Technology', value: 'Technology'},
+                            {label: 'Healthcare', value: 'Healthcare'},
+                            {label: 'Finance', value: 'Finance'}
+                        ],
+                        precision: 0,
+                        scale: 0,
+                        type: 'picklist',
+                        relationshipName: null
+                    }
+                }
+            };
+
+            debugLog('Sending mock message to content script...');
+            
+            // Check if the extension's content script is loaded
+            if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.onMessage) {
+                debugLog('Chrome extension API detected');
+            } else {
+                debugLog('Chrome extension API not detected - extension may not be loaded');
+            }
+
+            // Try to trigger the extension manually if it's loaded
+            setTimeout(() => {
+                debugLog('Checking for API names on page...');
+                const apiContainers = document.querySelectorAll('.apinames-api-container');
+                debugLog(`Found ${apiContainers.length} API name containers`);
+                
+                const metadataButtons = document.querySelectorAll('.apinames-metadata-btn');
+                debugLog(`Found ${metadataButtons.length} metadata buttons`);
+            }, 1000);
+        }
+
+        // Listen for console messages
+        const originalLog = console.log;
+        console.log = function(...args) {
+            if (args[0] && args[0].includes && (args[0].includes('showMetadataPopup') || args[0].includes('updateFieldMetadata') || args[0].includes('Metadata button clicked'))) {
+                debugLog(args.join(' '));
+            }
+            originalLog.apply(console, args);
+        };
+
+        debugLog('Test page loaded. Ready for extension testing.');
+    </script>
+</body>
+</html>

@@ -202,6 +202,14 @@ const COPY_ICON_SVG = `
   </svg>
 `;
 
+// SVG icons
+const METADATA_ICON_SVG = `
+  <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true">
+    <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" 
+          fill="currentColor"/>
+  </svg>
+`;
+
 // Update the APINAMES_STYLES with Salesforce-like styling
 const APINAMES_STYLES = `
   /* Base styles for both modes */
@@ -229,32 +237,62 @@ const APINAMES_STYLES = `
     pointer-events: none;
   }
 
+  /* Metadata button styles */
+  .apinames-metadata-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-left: 0.25rem;
+    border: 1px solid #dddbda;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    padding: 0;
+    vertical-align: middle;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+    background-color: #ffffff;
+    color: #706e6b;
+  }
+
+  .apinames-metadata-btn svg {
+    width: 0.75rem;
+    height: 0.75rem;
+    pointer-events: none;
+  }
+
   /* Lightning mode specific styles */
-  .lightning-mode .apinames-copy-btn {
+  .lightning-mode .apinames-copy-btn,
+  .lightning-mode .apinames-metadata-btn {
     background-color: #f3f2f2;
     border-color: #c9c7c5;
     color: #706e6b;
   }
 
-  .lightning-mode .apinames-copy-btn:hover {
+  .lightning-mode .apinames-copy-btn:hover,
+  .lightning-mode .apinames-metadata-btn:hover {
     background-color: #eef4ff;
     border-color: #1b96ff;
     color: #0176d3;
   }
 
-  .lightning-mode .apinames-copy-btn:active {
+  .lightning-mode .apinames-copy-btn:active,
+  .lightning-mode .apinames-metadata-btn:active {
     background-color: #e1f0ff;
     border-color: #0176d3;
   }
 
   /* Classic mode specific styles */
-  .classic-mode .apinames-copy-btn {
+  .classic-mode .apinames-copy-btn,
+  .classic-mode .apinames-metadata-btn {
     background-color: #f8f8f8;
     border-color: #c0c0c0;
     color: #333333;
   }
 
-  .classic-mode .apinames-copy-btn:hover {
+  .classic-mode .apinames-copy-btn:hover,
+  .classic-mode .apinames-metadata-btn:hover {
     background-color: #e6f2fb;
     border-color: #7eb4dd;
     color: #015ba7;
@@ -276,6 +314,151 @@ const APINAMES_STYLES = `
   .classic-mode .apinames-multi-selected,
   .classic-mode .apinames-query-selected {
     box-shadow: 0 0 0 1px #015ba7 !important;
+  }
+
+  /* Metadata popup styles */
+  .apinames-metadata-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    max-height: 80vh;
+    padding: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    z-index: 100001;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    overflow: hidden;
+    animation: popup-fadeIn 0.3s ease-out;
+  }
+
+  .apinames-metadata-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 100000;
+    animation: overlay-fadeIn 0.3s ease-out;
+  }
+
+  .apinames-metadata-popup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background: linear-gradient(135deg, #0176d3 0%, #0b5cab 100%);
+    color: white;
+  }
+
+  .apinames-metadata-popup-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .apinames-metadata-popup-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+  }
+
+  .apinames-metadata-popup-close:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .apinames-metadata-popup-content {
+    padding: 20px;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+
+  .apinames-metadata-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .apinames-metadata-item {
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border-left: 3px solid #0176d3;
+  }
+
+  .apinames-metadata-label {
+    font-weight: 600;
+    color: #333;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  .apinames-metadata-value {
+    color: #666;
+    font-size: 14px;
+    word-break: break-word;
+  }
+
+  .apinames-metadata-value.boolean-true {
+    color: #28a745;
+    font-weight: 500;
+  }
+
+  .apinames-metadata-value.boolean-false {
+    color: #dc3545;
+    font-weight: 500;
+  }
+
+  .apinames-metadata-formula {
+    grid-column: 1 / -1;
+    background: #fff3cd;
+    border-left-color: #ffc107;
+  }
+
+  .apinames-metadata-formula .apinames-metadata-value {
+    font-family: monospace;
+    font-size: 12px;
+    background: white;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+    white-space: pre-wrap;
+    max-height: 150px;
+    overflow-y: auto;
+  }
+
+  @keyframes popup-fadeIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+  @keyframes overlay-fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 `;
 
@@ -489,7 +672,7 @@ const domHelper = {
         return el;
     },
 
-    createApiContainer: (apiName, isField = true) => {
+    createApiContainer: (apiName, isField = true, label = '', fieldMetadata = null) => {
         const container = domHelper.createElement('div', {
             className: 'apinames-api-container',
             style: `display: ${isField ? 'block' : 'inline-flex'}; margin: ${isField ? '0.25rem 0 0' : '0 0 0 0.5rem'};`
@@ -501,6 +684,11 @@ const domHelper = {
         });
 
         container.append(textSpan, domHelper.createCopyButton(apiName));
+        
+        if (isField && label && fieldMetadata && fieldMetadata[apiName]) {
+            container.append(domHelper.createMetadataButton(apiName, label));
+        }
+        
         return container;
     },
 
@@ -517,6 +705,29 @@ const domHelper = {
 
         button.addEventListener('click', (e) => {
             copyManager.handleCopy(apiName, e);
+        });
+
+        return button;
+    },
+
+    createMetadataButton: (apiName, label) => {
+        const button = document.createElement('button');
+        button.className = 'apinames-metadata-btn';
+        button.innerHTML = METADATA_ICON_SVG;
+        button.title = 'Show field metadata';
+        button.setAttribute('data-api-name', apiName);
+        button.setAttribute('data-label', label);
+        button.style.cssText = `
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    `;
+
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Metadata button clicked for:', { apiName, label });
+            metadataManager.showMetadataPopup(apiName, label);
         });
 
         return button;
@@ -543,16 +754,161 @@ const utils = {
     }
 };
 
+// ==================== Metadata Management ====================
+const metadataManager = {
+  currentFieldMetadata: null,
+
+  init() {
+    // Add event listener for metadata buttons
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.apinames-metadata-btn')) {
+        const button = e.target.closest('.apinames-metadata-btn');
+        const apiName = button.getAttribute('data-api-name');
+        const label = button.getAttribute('data-label');
+        this.showMetadataPopup(apiName, label);
+      }
+    });
+
+    // Add event listener for closing popup
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('apinames-metadata-popup-overlay') || 
+          e.target.classList.contains('apinames-metadata-popup-close')) {
+        this.closeMetadataPopup();
+      }
+    });
+
+    // Add escape key listener
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && document.querySelector('.apinames-metadata-popup')) {
+        this.closeMetadataPopup();
+      }
+    });
+  },
+
+  showMetadataPopup(apiName, label) {
+    console.log('showMetadataPopup called with:', { apiName, label });
+    console.log('currentFieldMetadata:', this.currentFieldMetadata);
+    
+    const fieldData = this.currentFieldMetadata?.[apiName];
+    console.log('fieldData for', apiName, ':', fieldData);
+    
+    if (!fieldData) {
+      console.warn('No metadata found for field:', apiName);
+      toastManager.show('Metadata not available for this field', 'error');
+      return;
+    }
+
+    this.closeMetadataPopup(); // Close any existing popup
+
+    const overlay = document.createElement('div');
+    overlay.className = 'apinames-metadata-popup-overlay';
+
+    const popup = document.createElement('div');
+    popup.className = 'apinames-metadata-popup';
+
+    popup.innerHTML = `
+      <div class="apinames-metadata-popup-header">
+        <h3 class="apinames-metadata-popup-title">Field Metadata: ${utils.escapeHtml(label)} (${utils.escapeHtml(apiName)})</h3>
+        <button class="apinames-metadata-popup-close">&times;</button>
+      </div>
+      <div class="apinames-metadata-popup-content">
+        ${this.generateMetadataContent(fieldData)}
+      </div>
+    `;
+
+    overlay.appendChild(popup);
+    document.body.appendChild(overlay);
+  },
+
+  closeMetadataPopup() {
+    const overlay = document.querySelector('.apinames-metadata-popup-overlay');
+    if (overlay) {
+      overlay.remove();
+    }
+  },
+
+  generateMetadataContent(fieldData) {
+    const requiredFields = [
+      'autoNumber', 'calculated', 'calculatedFormula', 'createable', 'caseSensitive',
+      'custom', 'defaultValue', 'defaultValueFormula', 'defaultedOnCreate',
+      'dependentPicklist', 'controllerName', 'digits', 'externalId', 'filterable',
+      'label', 'length', 'name', 'picklistValues', 'precision', 'scale', 'type', 'relationshipName'
+    ];
+
+    let content = '<div class="apinames-metadata-grid">';
+
+    requiredFields.forEach(field => {
+      if (fieldData.hasOwnProperty(field)) {
+        const value = fieldData[field];
+        const isFormula = field === 'calculatedFormula' || field === 'defaultValueFormula';
+        const itemClass = isFormula ? 'apinames-metadata-item apinames-metadata-formula' : 'apinames-metadata-item';
+        
+        content += `
+          <div class="${itemClass}">
+            <div class="apinames-metadata-label">${this.formatFieldName(field)}</div>
+            <div class="apinames-metadata-value ${this.getValueClass(value)}">${this.formatValue(value)}</div>
+          </div>
+        `;
+      }
+    });
+
+    content += '</div>';
+    return content;
+  },
+
+  formatFieldName(field) {
+    return field.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+  },
+
+  formatValue(value) {
+    if (value === null || value === undefined) {
+      return '<em>null</em>';
+    }
+    if (typeof value === 'boolean') {
+      return value ? 'True' : 'False';
+    }
+    if (Array.isArray(value)) {
+      if (value.length === 0) {
+        return '<em>empty array</em>';
+      }
+      return value.map(item => {
+        if (typeof item === 'object' && item.label) {
+          return item.label;
+        }
+        return String(item);
+      }).join(', ');
+    }
+    if (typeof value === 'string' && value.length > 100) {
+      return value; // Long strings will be handled by CSS
+    }
+    return utils.escapeHtml(String(value));
+  },
+
+  getValueClass(value) {
+    if (typeof value === 'boolean') {
+      return value ? 'boolean-true' : 'boolean-false';
+    }
+    return '';
+  },
+
+  updateFieldMetadata(fieldMetadata) {
+    console.log('updateFieldMetadata called with:', fieldMetadata);
+    this.currentFieldMetadata = fieldMetadata;
+    console.log('currentFieldMetadata updated to:', this.currentFieldMetadata);
+  }
+};
+
 // ==================== Main Logic ====================
 const apiNameManager = (() => {
     const init = () => {
         styleManager.injectStyles();
         chrome.runtime.onMessage.addListener(handleMessage);
         document.addEventListener('keyup', handleKeyUp);
+        metadataManager.init();
         tipsPopup.checkVersionAndShow();
     };
 
-    const processFields = (selector, filter, labelExtractor, labelMap) => {
+    const processFields = (selector, filter, labelExtractor, labelMap, fieldMetadata) => {
         const elements = document.querySelectorAll(selector);
         const labelCounts = {};
 
@@ -563,13 +919,16 @@ const apiNameManager = (() => {
             const apiName = findApiName(label, labelCounts, labelMap);
             if (apiName) {
                 removeExistingApiElement(el);
-                appendApiElement(el, apiName);
+                appendApiElement(el, apiName, label, fieldMetadata);
             }
         });
     };
 
-    const findApiName = (label, counts, { labelMap, assistLabelMap }) => {
+    const findApiName = (label, counts, labelMapData) => {
         counts[label] = (counts[label] || -1) + 1;
+        // labelMapData is now the full object with labelMap and assistLabelMap
+        const labelMap = labelMapData.labelMap || labelMapData;
+        const assistLabelMap = labelMapData.assistLabelMap || {};
         return labelMap?.[label]?.[counts[label]] || assistLabelMap?.[label];
     };
 
@@ -579,8 +938,8 @@ const apiNameManager = (() => {
             ?.remove();
     };
 
-    const appendApiElement = (el, apiName) => {
-        const container = domHelper.createApiContainer(apiName);
+    const appendApiElement = (el, apiName, label, fieldMetadata) => {
+        const container = domHelper.createApiContainer(apiName, true, label, fieldMetadata);
         const fieldContainer = el.closest('.slds-form-element__control, .labelCol') || el;
         fieldContainer.appendChild(container);
     };
@@ -611,18 +970,23 @@ const apiNameManager = (() => {
     };
 
     const handleMessage = (message) => {
+        console.log('Content script received message:', message);
         if (message.command === 'showApiName') {
+            console.log('Processing showApiName command');
+            console.log('Field metadata received:', message.fieldMetadata);
             copyManager.init(message.sObjectName); // Initialize name storage
+            metadataManager.updateFieldMetadata(message.fieldMetadata);
             toggleDisplay({
                 isLightning: message.isLightningMode,
                 sObjectName: message.sObjectName,
                 labelMap: message.labelMap,
-                longId: message.longId
+                longId: message.longId,
+                fieldMetadata: message.fieldMetadata
             });
         }
     };
 
-    const toggleDisplay = ({ isLightning, sObjectName, labelMap, longId }) => {
+    const toggleDisplay = ({ isLightning, sObjectName, labelMap, longId, fieldMetadata }) => {
         if (utils.isAPINameVisible()) {
             utils.removeAllApiElements();
         } else {
@@ -631,15 +995,16 @@ const apiNameManager = (() => {
                 SELECTORS[mode].FIELD_LABEL,
                 SELECTORS[mode].OBJECT_TITLE,
                 sObjectName,
-                labelMap,
+                labelMap, // This is now the full object with labelMap, assistLabelMap, and fieldMetadata
                 longId,
-                isLightning
+                isLightning,
+                fieldMetadata
             );
         }
     };
 
     // In the injectApiNames function, add the lightning mode class to body
-    const injectApiNames = (fieldSelector, objectSelector, sObjectName, labelMap, longId, isLightning) => {
+    const injectApiNames = (fieldSelector, objectSelector, sObjectName, labelMapData, longId, isLightning, fieldMetadata) => {
         // Remove any existing mode classes
         document.body.classList.remove('lightning-mode', 'classic-mode');
 
@@ -649,14 +1014,16 @@ const apiNameManager = (() => {
             processFields(fieldSelector,
                 el => el.childNodes.length > 0,
                 el => el.firstChild?.innerText,
-                labelMap
+                labelMapData,
+                fieldMetadata
             );
         } else {
             document.body.classList.add('classic-mode');
             processFields(fieldSelector,
                 () => true,
                 el => el.textContent.split('sfdcPage.')[0],
-                labelMap
+                labelMapData,
+                fieldMetadata
             );
         }
         addObjectApiName(objectSelector, sObjectName, longId);

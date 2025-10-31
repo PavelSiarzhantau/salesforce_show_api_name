@@ -24,10 +24,36 @@ async function getLabelMap(host, sObjectName, sObjectId, headers) {
     const describeData = await describeResponse.json();
 
     const assistLabelMap = {};
+    const fieldMetadata = {};
     describeData.fields?.forEach(field => {
         if (!labelMap[field.label]) {
             assistLabelMap[field.label] = field.name;
         }
+        // Store detailed field metadata for the metadata popup
+        fieldMetadata[field.name] = {
+            autoNumber: field.autoNumber,
+            calculated: field.calculated,
+            calculatedFormula: field.calculatedFormula,
+            createable: field.createable,
+            caseSensitive: field.caseSensitive,
+            custom: field.custom,
+            defaultValue: field.defaultValue,
+            defaultValueFormula: field.defaultValueFormula,
+            defaultedOnCreate: field.defaultedOnCreate,
+            dependentPicklist: field.dependentPicklist,
+            controllerName: field.controllerName,
+            digits: field.digits,
+            externalId: field.externalId,
+            filterable: field.filterable,
+            label: field.label,
+            length: field.length,
+            name: field.name,
+            picklistValues: field.picklistValues,
+            precision: field.precision,
+            scale: field.scale,
+            type: field.type,
+            relationshipName: field.relationshipName
+        };
     });
 
     if (sObjectName === 'User') {
@@ -42,7 +68,7 @@ async function getLabelMap(host, sObjectName, sObjectId, headers) {
         });
     }
 
-    return { labelMap, assistLabelMap };
+    return { labelMap, assistLabelMap, fieldMetadata };
 }
 
 async function getSObjectName(host, headers, keyPrefix) {
@@ -121,10 +147,23 @@ async function showApiName(tab) {
     const labelMap = await getLabelMap(apiHost, sObjectName, sObjectId, headers);
     const longId = getLongId(sObjectId);
 
+    console.log('Background script sending message to content script');
+    console.log('Message data:', {
+        command: "showApiName",
+        isLightningMode: isLightning,
+        labelMap: labelMap.labelMap,
+        assistLabelMap: labelMap.assistLabelMap,
+        fieldMetadata: labelMap.fieldMetadata,
+        sObjectName,
+        longId
+    });
+    
     await chrome.tabs.sendMessage(tab.id, {
         command: "showApiName",
         isLightningMode: isLightning,
-        labelMap,
+        labelMap: labelMap.labelMap,
+        assistLabelMap: labelMap.assistLabelMap,
+        fieldMetadata: labelMap.fieldMetadata,
         sObjectName,
         longId
     });
